@@ -7,4 +7,3 @@ Promise.all([
   console.log('Primer texto: ' + text)
   console.log('Segundo texto: ' + text2)
 })
-

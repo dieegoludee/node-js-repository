@@ -15,13 +15,13 @@ console.log('----------------------------')
 console.log('Método Asíncrono')
 console.log('----------------------------')
 console.log('Leyendo el primer archivo...')
-fs.readFile('./archivo.txt', 'utf-8', (err, text) => {
+fs.readFile('./archivo.txt', 'utf-8', (_err, text) => {
   console.log(text)
 })
 
 console.log('Haciendo cosas mientras lee el archivo...')
 
 console.log('Leyendo el segundo archivo...')
-fs.readFile('./archivo2.txt', 'utf-8', (err, text) => {
+fs.readFile('./archivo2.txt', 'utf-8', (_err, text) => {
   console.log(text)
 })

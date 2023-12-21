@@ -15,4 +15,3 @@ const { readFile } = require('node:fs/promises')
     console.log('Segundo texto: ' + text2)
   }
 )()
-
