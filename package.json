@@ -1,0 +1,17 @@
+{
+  "name": "node-js-repository",
+  "version": "1.0.0",
+  "description": "![image](https://github.com/dieegoludee/node-js-repository/assets/127766535/1f0da9ad-2ee3-4697-b1e6-e8c086417cb3)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "diegoludev",
+  "license": "ISC",
+  "devDependencies": {
+    "standard": "^17.1.0"
+  },
+  "eslintConfig": {
+    "extends": "standard"
+  }
+}
