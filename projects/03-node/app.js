@@ -1,19 +1,28 @@
 const express = require('express')
 const crypto = require('node:crypto')
+const cors = require('cors')
 const movies = require('./movies.json')
 const { validateMovie, validatePartialMovie } = require('./schemas/movies.js')
 
 const PORT = process.env.PORT ?? 1234
 
-const ACCEPTED_ORIGINS = [
-  'http://localhost:8080',
-  'http://localhost:1234',
-  'https://movies.com'
-]
-
 const app = express()
 app.use(express.json())
-app.disable('x-powered-by')
+app.use(cors({
+  origin: (origin, callback) => {
+    const ACCEPTED_ORIGINS = [
+      'http://localhost:8080',
+      'http://localhost:1234',
+      'https://movies.com'
+    ]
+
+    if (ACCEPTED_ORIGINS.includes(origin)) return callback(null, true)
+    if (!origin) return callback(null, true)
+
+    return callback(new Error('Not allowed by CORS'))
+  }
+}))
+app.disable('x-powered-by') // deshabilitar el header X-Powered-By: Express
 
 app.get('/', (req, res) => {
   // leer el query param de format
@@ -26,12 +35,6 @@ app.get('/', (req, res) => {
 
 // Todos los recursos que sean MOVIES se identifican con /movies
 app.get('/movies', (req, res) => {
-  const origin = req.header('origin')
-  // CORS Header (sólo en este endpoint)
-  if (ACCEPTED_ORIGINS.includes(origin) || !origin) {
-    res.header('Access-Control-Allow-Origin', origin)
-  }
-
   const { genre } = req.query
   if (genre) {
     const filteredMovies = movies.filter(
@@ -71,12 +74,6 @@ app.post('/movies', (req, res) => {
 })
 
 app.delete('/movies/:id', (req, res) => {
-  const origin = req.header('origin')
-  // CORS Header (sólo en este endpoint)
-  if (ACCEPTED_ORIGINS.includes(origin) || !origin) {
-    res.header('Access-Control-Allow-Origin', origin)
-  }
-
   const { id } = req.params
   const movieIndex = movies.findIndex(movie => movie.id === id)
 
@@ -106,17 +103,6 @@ app.patch('/movies/:id', (req, res) => {
   movies[movieIndex] = updateMovie
 
   res.json(updateMovie)
-})
-
-// Para el CORS Pre-Flight
-app.options('/movies/:id', (req, res) => {
-  const origin = req.header('origin')
-  if (ACCEPTED_ORIGINS.includes(origin) || !origin) {
-    res.header('Access-Control-Allow-Origin', origin)
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATH, DELETE')
-  }
-
-  res.send(200)
 })
 
 app.listen(PORT, () => console.log(`Server listening on port http://localhost:${PORT}`))
